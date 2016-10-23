@@ -6,6 +6,7 @@
 //  Copyright © 2016 Matt Benavente. All rights reserved.
 //
 
+
 import UIKit
 
 @UIApplicationMain
@@ -16,6 +17,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //I added: When our app launches it will decides which view controller to show first, it will decide based on weather we currently have a jwttoken in UserDefaults
+        let defaults = UserDefaults.standard
+        let token = defaults.value(forKey: "jwtToken")
+        let navigationController = window!.rootViewController! as! UINavigationController
+        
+        //If the jwt token doesn't exist show Login screen, else show Todos screen
+        navigationController.performSegue(withIdentifier: token == nil ? "showLoginViewController" : "showTodosViewController", sender: nil)
+        
         return true
     }
 
