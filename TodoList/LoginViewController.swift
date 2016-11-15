@@ -6,10 +6,9 @@
 //  Copyright © 2016 Matt Benavente. All rights reserved.
 //
 
-
-import UIKit
 import Alamofire
-import SwiftyJSON  // To pick apart the JSON response, so we can save the Auth token and User ID on the Phone for future API calls and persistant sessions
+import UIKit
+import SwiftyJSON // To pick apart the JSON response, so we can save the Auth token and User ID on the Phone for future API calls and persistant sessions
 
 
 class LoginViewController: UIViewController {
@@ -19,11 +18,11 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var passwordTextField: UITextField!
 
-    @IBAction func signInButtonPress(_ sender: AnyObject) {
+    @IBAction func signInButtonPress(sender: AnyObject) {
         postCredentials(endpoint: APIEndpoints.signinURL)
     }
     
-    @IBAction func signUpButtonPress(_ sender: AnyObject) {
+    @IBAction func signUpButtonPress(sender: AnyObject) {
         postCredentials(endpoint: APIEndpoints.signupURL) //just uses the logic from post credentials function below, passing in the relevent endpoints (signin / signup)
     }
     
@@ -42,12 +41,15 @@ class LoginViewController: UIViewController {
             //Creating or signing in user with a POST request to our API (node.js server on our local machine)
             // The URL endpoint for our APIs action to be taken wwww.  or http://localhost:3000/v1/signup http://localhost:3000/v1/signin
             // We passs in values for our post parameters from above , email and pw from the parameters obj dictionary
+            
+            //Alamofire.request(.POST, endpoint, parameters: parameters, encoding: .JSON).responseJSON { response in
             Alamofire.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
                 
                 switch response.result {
                 case.success:    //Status code 200
                     if let value = response.result.value {
-                        let defaults = UserDefaults.standard
+                        //let defaults = NSUserDefaults.standardUserDefaults() //2.3
+                        let defaults = UserDefaults.standard //3.0
                         let json = JSON(value) // Passing result to SwiftyJSONs JSON function to parse it
                         defaults.setValue(json["token"].string, forKey: "jwtToken") //Getting the token from the JSON obj and storing it for the key jwtToken
                         defaults.setValue(json["userId"].string, forKey: "userId") //getting the ID from the JSON obj and storing it for the key userId  the .string is how we unwrap optionals with swiftyJSON

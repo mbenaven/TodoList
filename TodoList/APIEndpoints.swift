@@ -12,6 +12,9 @@ class APIEndpoints {
     private static let baseURL = "http://localhost:3000/v1" //All other endpoints will stem from this baseURL
     static let signupURL = "\(baseURL)/signup"   // Now you can resplace the URL in the Alamofire request wit APIEnpoints.signupURL
     static let signinURL = "\(baseURL)/signin"
+    static func newTodoURL(userId: String) -> String {   //Function that takes UserID as an arg
+        return "\(baseURL)/users/\(userId)/todos/new"
+    }
 }
 
 //Setting up an API endpoint that signs our Users in

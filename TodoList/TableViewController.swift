@@ -9,10 +9,12 @@
 import UIKit
 
 class TableViewController: UITableViewController {
-    
-    let falseData = ["Test 1", "Test 2", "Test 3"]
 
-    @IBAction func logoutButtonPress(_ sender: AnyObject) {
+// let falseData = ["Test 1", "Test 2", "Test 3"]
+    let todoData = UserDefaults.standard.array(forKey: "todosArray")
+    //let todoData = UserDefaults.standard.value(forKey: "todosArray") //Get value from key todosArray and call that value todoData
+
+    @IBAction func logoutButtonPress(sender: AnyObject) {
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: "jwtToken") //To clear our token on logout
         
@@ -34,21 +36,55 @@ class TableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
+   /* override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let todoData = todoData {
+            return (todoData as AnyObject).count  // return todoData.count
+        } else {
+            return 0
+        }
+    }*/
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 3
+        if let todoData = todoData as? [String] {
+            return todoData.count
+        } else {
+            return 0
+        }
     }
 
-    //force cast table view cell
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    //force cast table view cell 
+    
+    /*override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as! TableViewCell
 
-        cell.label.text = self.falseData[0]
+        if let todoData = todoData {
+            if let text = todoData[indexPath.row] {
+                cell.label.text = text as? String
+            }
+        }
+        return cell
+    } */
+    
+    override func tableView(
+        _ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as! TableViewCell
+        cell.label.text = todoData?[indexPath.row] as? String
         return cell
     }
+    
+    /*
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as! TableViewCell
+        
+        if let todoData = todoData as? [String] {
+            if let text = todoData[indexPath.row] {
+                cell.label.text = text
+            }
+        }
+        return cell
+    } */
  
 }
